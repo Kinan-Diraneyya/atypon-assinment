@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.kinan</groupId>
-	<artifactId>atypon.assinment</artifactId>
+	<artifactId>atypon.assignment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>atypon.assignment</name>
 	<description>Atypon assignment for a recipe retrieval API project</description>
