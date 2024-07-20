@@ -3,6 +3,7 @@ package com.kinan.atypon.assignment.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -16,12 +17,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class Recipe {
 	
 	/*
 	 * The recipe's ID
 	 */
-	private Long id;
+	private String id;
 	
 	/*
 	 * The recipe's title
