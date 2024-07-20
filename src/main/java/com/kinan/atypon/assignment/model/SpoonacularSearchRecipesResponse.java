@@ -22,17 +22,17 @@ public class SpoonacularSearchRecipesResponse {
 	/*
 	 * The response's result offset (how many results to skip, as used in pagination)
 	 */
-	private int offset;
+	private Integer offset;
 	
 	/*
 	 * The response's result number (AKA page size, how many results to return, as used in pagination)
 	 */
-	private int number;
+	private Integer number;
 	
 	/*
 	 * The total number of results found (as used in pagination)
 	 */
-	private int totalResults;
+	private Integer totalResults;
 	
 	/*
 	 * The results found

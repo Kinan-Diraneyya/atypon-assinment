@@ -21,7 +21,7 @@ public class Recipe {
 	/*
 	 * The recipe's ID
 	 */
-	private long id;
+	private Long id;
 	
 	/*
 	 * The recipe's title

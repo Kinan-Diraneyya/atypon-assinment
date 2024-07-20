@@ -24,7 +24,7 @@ public class Ingredient {
     /**
      * The ID of the ingredient.
      */
-	private int id;
+	private Integer id;
 	
 	/**
      * The name of the ingredient.

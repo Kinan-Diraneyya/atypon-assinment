@@ -31,5 +31,5 @@ public class Nutrient {
     /**
      * The amount of the nutrient.
      */
-    private double amount;
+    private Double amount;
 }
