@@ -56,7 +56,7 @@ public class RecipeControllerTest {
         };
     	List<Recipe> mockRecipes = Arrays.asList(mockRecipesArray);
         SearchRecipesResult mockResult = new SearchRecipesResult(1, 2, 100, mockRecipes);
-        when(recipeService.searchRecipes(query)).thenReturn(mockResult);
+        when(recipeService.searchRecipes(query, 0, 2)).thenReturn(mockResult);
 
         mockMvc.perform(get("/api/v1/recipes/search")
                 .param("query", query))
@@ -129,7 +129,7 @@ public class RecipeControllerTest {
     @Test
     public void testHandleClientException() throws Exception {
         String query = "pasta";
-        when(recipeService.searchRecipes(query)).thenThrow(new ClientException("Client error"));
+        when(recipeService.searchRecipes(query, 0, 10)).thenThrow(new ClientException("Client error"));
 
         mockMvc.perform(get("/api/v1/recipes/search")
                 .param("query", query))
@@ -139,7 +139,7 @@ public class RecipeControllerTest {
     @Test
     public void testHandleServerException() throws Exception {
         String query = "pasta";
-        when(recipeService.searchRecipes(query)).thenThrow(new ServerException("Server error"));
+        when(recipeService.searchRecipes(query, 0, 10)).thenThrow(new ServerException("Server error"));
 
         mockMvc.perform(get("/api/v1/recipes/search")
                 .param("query", query))
@@ -149,7 +149,7 @@ public class RecipeControllerTest {
     @Test
     public void testHandleTimeoutException() throws Exception {
         String query = "pasta";
-        when(recipeService.searchRecipes(query)).thenThrow(new TimeoutException("Timeout error"));
+        when(recipeService.searchRecipes(query, 0, 10)).thenThrow(new TimeoutException("Timeout error"));
 
         mockMvc.perform(get("/api/v1/recipes/search")
                 .param("query", query))
@@ -159,7 +159,7 @@ public class RecipeControllerTest {
     @Test
     public void testHandleGeneralException() throws Exception {
         String query = "pasta";
-        when(recipeService.searchRecipes(query)).thenThrow(new RuntimeException("General error"));
+        when(recipeService.searchRecipes(query, 0, 10)).thenThrow(new RuntimeException("General error"));
 
         mockMvc.perform(get("/api/v1/recipes/search")
                 .param("query", query))

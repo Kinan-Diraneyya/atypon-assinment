@@ -62,16 +62,21 @@ public class RecipeController {
      * </p>
      *
      * @param query the search query string
+     * @param page the page to get results from
+     * @param pageSize the number of results to get
      * @return a ResponseEntity containing the search results
      */
 	@GetMapping("/search")
-	public ResponseEntity<SearchRecipesResult> searchRecipes(@RequestParam String query) {
+	public ResponseEntity<SearchRecipesResult> searchRecipes(
+			@RequestParam String query, 
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "10") int pageSize) {
 		log.info("Received search request with query: {}", query);
 	    if (query == null || query.trim().isEmpty()) {
 	        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Query cannot be empty");
 	    }
 	    
-		SearchRecipesResult response = recipeService.searchRecipes(query);
+		SearchRecipesResult response = recipeService.searchRecipes(query, page, pageSize);
 		log.info("Returning reponse: {}", response);
 		return ResponseEntity.ok(response);
 	}

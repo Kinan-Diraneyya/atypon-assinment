@@ -51,6 +51,8 @@ public class RecipeService {
      * </p>
      *
      * @param query the search query string to find matching recipes
+     * @param page the page to get results from
+     * @param pageSize the number of results to get
      * @return a {@link SearchRecipesResult} containing the search results from the Spoonacular API
      * @throws IllegalArgumentException if the query is null or empty
      * @throws ClientException if a client error occurs (4xx)
@@ -58,12 +60,12 @@ public class RecipeService {
      * @throws TimeoutException if a timeout error occurs
      * @throws RuntimeException if an unexpected error occurs
      */
-    public SearchRecipesResult searchRecipes(String query) {
+    public SearchRecipesResult searchRecipes(String query, int page, int pageSize) {
     	log.info("Searching recipes using the following query: {}", query);
     	
-        SpoonacularSearchRecipesResponse response = spoonacularClient.searchRecipes(query);
+        SpoonacularSearchRecipesResponse response = spoonacularClient.searchRecipes(query, page, pageSize);
         SearchRecipesResult searchRecipesResult = SearchRecipesResult.builder()
-        		.page(response.getOffset())
+        		.page(response.getOffset() / response.getNumber())
         		.pageSize(response.getNumber())
         		.totalResults(response.getTotalResults())
         		.records(response.getResults())

@@ -145,7 +145,7 @@ public class SpoonacularClientTest {
     public void testSearchRecipes_SuccessfulResponse() {
         SpoonacularSearchRecipesResponse mockResponse = new SpoonacularSearchRecipesResponse();
         when(restTemplate.getForObject(anyString(), any())).thenReturn(mockResponse);
-        SpoonacularSearchRecipesResponse response = spoonacularClient.searchRecipes("pasta");
+        SpoonacularSearchRecipesResponse response = spoonacularClient.searchRecipes("pasta", 0, 10);
         assertEquals(mockResponse, response);
     }
 
@@ -159,7 +159,7 @@ public class SpoonacularClientTest {
     @Test
     public void testSearchRecipes_EmptyQuery() {
         assertThrows(IllegalArgumentException.class, () -> {
-            spoonacularClient.searchRecipes("");
+            spoonacularClient.searchRecipes("", 0, 10);
         });
     }
 
@@ -173,7 +173,7 @@ public class SpoonacularClientTest {
     @Test
     public void testSearchRecipes_NullQuery() {
         assertThrows(IllegalArgumentException.class, () -> {
-            spoonacularClient.searchRecipes(null);
+            spoonacularClient.searchRecipes(null, 0, 10);
         });
     }
 
@@ -188,7 +188,7 @@ public class SpoonacularClientTest {
     public void testSearchRecipes_ClientError() {
         when(restTemplate.getForObject(anyString(), any())).thenThrow(HttpClientErrorException.class);
         assertThrows(ClientException.class, () -> {
-            spoonacularClient.searchRecipes("query");
+            spoonacularClient.searchRecipes("query", 0, 10);
         });
     }
 
@@ -203,7 +203,7 @@ public class SpoonacularClientTest {
     public void testSearchRecipes_ServerError() {
         when(restTemplate.getForObject(anyString(), any())).thenThrow(HttpServerErrorException.class);
         assertThrows(ServerException.class, () -> {
-            spoonacularClient.searchRecipes("query");
+            spoonacularClient.searchRecipes("query", 0, 10);
         });
     }
 
@@ -218,7 +218,7 @@ public class SpoonacularClientTest {
     public void testSearchRecipes_TimeoutError() {
         when(restTemplate.getForObject(anyString(), any())).thenThrow(ResourceAccessException.class);
         assertThrows(TimeoutException.class, () -> {
-            spoonacularClient.searchRecipes("query");
+            spoonacularClient.searchRecipes("query", 0, 10);
         });
     }
 }

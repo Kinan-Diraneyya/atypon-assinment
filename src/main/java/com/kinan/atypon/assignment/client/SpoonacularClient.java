@@ -84,6 +84,8 @@ public class SpoonacularClient {
      * </p>
      *
      * @param query the search query string to find matching recipes
+     * @param page the page to get results from
+     * @param pageSize the number of results to get
      * @return a {@link SpoonacularSearchRecipesResponse} containing the search results from the Spoonacular API
      * @throws IllegalArgumentException if the query is null or empty
      * @throws ClientException if a client error occurs (4xx)
@@ -91,14 +93,14 @@ public class SpoonacularClient {
      * @throws TimeoutException if a timeout error occurs
      * @throws RuntimeException if an unexpected error occurs
      */
-    public SpoonacularSearchRecipesResponse searchRecipes(String query) {
+    public SpoonacularSearchRecipesResponse searchRecipes(String query, int page, int pageSize) {
     	log.info("Searching Spoonacular for recipes using the following query: {}", query);
     	if (query == null || query.trim().isEmpty()) {
             log.error("Invalid query parameter: query cannot be null or empty");
             throw new IllegalArgumentException("query cannot be null or empty");
         }
     	
-        String url = String.format("recipes/complexSearch?query=%s&apiKey=%s", query, apiKey);
+        String url = String.format("recipes/complexSearch?query=%s&apiKey=%s&offset=%s&number=%s", query, apiKey, page * pageSize, pageSize);
         SpoonacularSearchRecipesResponse response = execute(url, SpoonacularSearchRecipesResponse.class);
         return response;
     }

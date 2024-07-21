@@ -166,8 +166,8 @@ public class RecipeServiceTest {
     	SpoonacularSearchRecipesResponse mockResponse = new SpoonacularSearchRecipesResponse(4, 2, 10, mockTotalRecipes);
     	SearchRecipesResult expectedResponse = new SearchRecipesResult(4, 2, 10, mockTotalRecipes);
     	
-        when(spoonacularClient.searchRecipes(anyString())).thenReturn(mockResponse);
-        SearchRecipesResult response = recipeService.searchRecipes("existingRecipeID");
+        when(spoonacularClient.searchRecipes(anyString(), 0, 2)).thenReturn(mockResponse);
+        SearchRecipesResult response = recipeService.searchRecipes("existingRecipeID", 0, 2);
         assertEquals(response, expectedResponse);
     }
     
@@ -180,9 +180,9 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_EmptyQuery() {
-    	when(spoonacularClient.searchRecipes("")).thenThrow(IllegalArgumentException.class);
+    	when(spoonacularClient.searchRecipes("", 0, 10)).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-        	recipeService.searchRecipes("");
+        	recipeService.searchRecipes("", 0, 10);
         });
     }
 
@@ -195,9 +195,9 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_NullQuery() {
-    	when(spoonacularClient.searchRecipes(null)).thenThrow(IllegalArgumentException.class);
+    	when(spoonacularClient.searchRecipes(null, 0, 10)).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-        	recipeService.searchRecipes(null);
+        	recipeService.searchRecipes(null, 0, 10);
         });
     }
 
@@ -210,9 +210,9 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_ClientError() {
-        when(spoonacularClient.searchRecipes(anyString())).thenThrow(ClientException.class);
+        when(spoonacularClient.searchRecipes(anyString(), 0, 10)).thenThrow(ClientException.class);
         assertThrows(ClientException.class, () -> {
-            recipeService.searchRecipes("query");
+            recipeService.searchRecipes("query", 0, 10);
         });
     }
 
@@ -225,9 +225,9 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_ServerError() {
-        when(spoonacularClient.searchRecipes(anyString())).thenThrow(ServerException.class);
+        when(spoonacularClient.searchRecipes(anyString(), 0, 10)).thenThrow(ServerException.class);
         assertThrows(ServerException.class, () -> {
-            recipeService.searchRecipes("query");
+            recipeService.searchRecipes("query", 0, 10);
         });
     }
 
@@ -240,9 +240,9 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_TimeoutError() {
-        when(spoonacularClient.searchRecipes(anyString())).thenThrow(TimeoutException.class);
+        when(spoonacularClient.searchRecipes(anyString(), 0, 10)).thenThrow(TimeoutException.class);
         assertThrows(TimeoutException.class, () -> {
-            recipeService.searchRecipes("query");
+            recipeService.searchRecipes("query", 0, 10);
         });
     }
 
