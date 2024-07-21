@@ -172,7 +172,7 @@ public class RecipeController {
 	@ExceptionHandler(TimeoutException.class)
 	public ResponseEntity<String> handleTimeoutException(TimeoutException ex) {
 		log.info("Encountered a timeout exception");
-		return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(ex.getMessage());
+		return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(ex.getMessage());
 	}
 
 	/**

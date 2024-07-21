@@ -153,7 +153,7 @@ public class RecipeControllerTest {
 
         mockMvc.perform(get("/api/v1/recipes/search")
                 .param("query", query))
-                .andExpect(status().isRequestTimeout());
+                .andExpect(status().isGatewayTimeout());
     }
 
     @Test
