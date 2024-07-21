@@ -21,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -164,10 +165,10 @@ public class RecipeServiceTest {
     	List<Recipe> mockTotalRecipes = Arrays.asList(mockTotalRecipesArray);
     	
     	SpoonacularSearchRecipesResponse mockResponse = new SpoonacularSearchRecipesResponse(4, 2, 10, mockTotalRecipes);
-    	SearchRecipesResult expectedResponse = new SearchRecipesResult(4, 2, 10, mockTotalRecipes);
+    	SearchRecipesResult expectedResponse = new SearchRecipesResult(2, 2, 10, mockTotalRecipes);
     	
-        when(spoonacularClient.searchRecipes(anyString(), 0, 2)).thenReturn(mockResponse);
-        SearchRecipesResult response = recipeService.searchRecipes("existingRecipeID", 0, 2);
+        when(spoonacularClient.searchRecipes(anyString(), anyInt(), anyInt())).thenReturn(mockResponse);
+        SearchRecipesResult response = recipeService.searchRecipes("existingRecipeID", 2, 2);
         assertEquals(response, expectedResponse);
     }
     
@@ -210,7 +211,7 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_ClientError() {
-        when(spoonacularClient.searchRecipes(anyString(), 0, 10)).thenThrow(ClientException.class);
+        when(spoonacularClient.searchRecipes(anyString(), anyInt(), anyInt())).thenThrow(ClientException.class);
         assertThrows(ClientException.class, () -> {
             recipeService.searchRecipes("query", 0, 10);
         });
@@ -225,7 +226,7 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_ServerError() {
-        when(spoonacularClient.searchRecipes(anyString(), 0, 10)).thenThrow(ServerException.class);
+        when(spoonacularClient.searchRecipes(anyString(), anyInt(), anyInt())).thenThrow(ServerException.class);
         assertThrows(ServerException.class, () -> {
             recipeService.searchRecipes("query", 0, 10);
         });
@@ -240,7 +241,7 @@ public class RecipeServiceTest {
      */
     @Test
     public void testSearchRecipes_TimeoutError() {
-        when(spoonacularClient.searchRecipes(anyString(), 0, 10)).thenThrow(TimeoutException.class);
+        when(spoonacularClient.searchRecipes(anyString(), anyInt(), anyInt())).thenThrow(TimeoutException.class);
         assertThrows(TimeoutException.class, () -> {
             recipeService.searchRecipes("query", 0, 10);
         });

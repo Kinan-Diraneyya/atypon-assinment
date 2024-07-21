@@ -61,7 +61,7 @@ public class RecipeService {
      * @throws RuntimeException if an unexpected error occurs
      */
     public SearchRecipesResult searchRecipes(String query, int page, int pageSize) {
-    	log.info("Searching recipes using the following query: {}", query);
+    	log.info("Searching recipes using the following query: {}, page: {}, and pageSize: {}", query, page, pageSize);
     	
         SpoonacularSearchRecipesResponse response = spoonacularClient.searchRecipes(query, page, pageSize);
         SearchRecipesResult searchRecipesResult = SearchRecipesResult.builder()

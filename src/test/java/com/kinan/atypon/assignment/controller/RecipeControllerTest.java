@@ -56,10 +56,12 @@ public class RecipeControllerTest {
         };
     	List<Recipe> mockRecipes = Arrays.asList(mockRecipesArray);
         SearchRecipesResult mockResult = new SearchRecipesResult(1, 2, 100, mockRecipes);
-        when(recipeService.searchRecipes(query, 0, 2)).thenReturn(mockResult);
+        when(recipeService.searchRecipes(query, 1, 2)).thenReturn(mockResult);
 
         mockMvc.perform(get("/api/v1/recipes/search")
-                .param("query", query))
+        		.param("query", query)
+		        .param("page", "1")
+				.param("pageSize", "2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.page").value(1))
                 .andExpect(jsonPath("$.pageSize").value(2))
