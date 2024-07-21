@@ -65,6 +65,7 @@ public class SpoonacularClient {
      * @throws RuntimeException if an unexpected error occurs
      */
     public SpoonacularGetRecipeNutritionsResponse getRecipeNutritions(String recipeId) {
+    	log.info("Fetching recipe nutritions from Spoonacular using the following reciptID: {}", recipeId);
     	if (recipeId == null || recipeId.trim().isEmpty()) {
             log.error("Invalid recipe ID parameter: recipeId cannot be null or empty");
             throw new IllegalArgumentException("recipeId cannot be null or empty");
@@ -91,6 +92,7 @@ public class SpoonacularClient {
      * @throws RuntimeException if an unexpected error occurs
      */
     public SpoonacularSearchRecipesResponse searchRecipes(String query) {
+    	log.info("Searching Spoonacular for recipes using the following query: {}", query);
     	if (query == null || query.trim().isEmpty()) {
             log.error("Invalid query parameter: query cannot be null or empty");
             throw new IllegalArgumentException("query cannot be null or empty");
@@ -140,7 +142,7 @@ public class SpoonacularClient {
             throw new RuntimeException("An unexpected error occurred: " + e.getMessage());
         }
         
-        log.info("Received response: {}", response);
+        log.info("The request succeeded, returning the following response: {}", response);
         return response;
     }
 
@@ -155,11 +157,14 @@ public class SpoonacularClient {
      * @param httpStatusCodeException the exception to extract the response body from
      */
     private String getResponseBodyFromException(HttpStatusCodeException httpStatusCodeException) {
+    	log.trace("Extracting the response body from the exception");
     	String body;
     	try {
     		body = httpStatusCodeException.getResponseBodyAsString();
+    		log.trace("The found the response body: {}", body);
     	} catch (Exception e) {
     		body = "No response body";
+    		log.trace("The exception has no response body");
     	}
     	return body;
     }

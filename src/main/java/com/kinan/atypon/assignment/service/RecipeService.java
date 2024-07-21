@@ -59,6 +59,8 @@ public class RecipeService {
      * @throws RuntimeException if an unexpected error occurs
      */
     public SearchRecipesResult searchRecipes(String query) {
+    	log.info("Searching recipes using the following query: {}", query);
+    	
         SpoonacularSearchRecipesResponse response = spoonacularClient.searchRecipes(query);
         SearchRecipesResult searchRecipesResult = SearchRecipesResult.builder()
         		.page(response.getOffset())
@@ -66,6 +68,8 @@ public class RecipeService {
         		.totalResults(response.getTotalResults())
         		.records(response.getResults())
         		.build();
+        
+        log.info("Mapped the response to a SearchRecipesResult: {}", searchRecipesResult);
         return searchRecipesResult;
     }
     
@@ -87,6 +91,8 @@ public class RecipeService {
      * @throws RuntimeException if an unexpected error occurs
      */
     public GetRecipeNutritionsResult getRecipeNutritions(String recipeID) {
+    	log.info("Fetching recipe nutritions using the following reciptID: {}", recipeID);
+    	
     	SpoonacularGetRecipeNutritionsResponse response = spoonacularClient.getRecipeNutritions(recipeID);
     	List<Nutrient> nutrients = response.getNutrients()
     			.stream()
@@ -102,12 +108,12 @@ public class RecipeService {
     	for (Ingredient ingredient : response.getIngredients()) {
     		caloriesTotal += extractCalories(ingredient);
     	}
+    	log.trace("The sum of the calories of all ingredients: {}", caloriesTotal);
     	Nutrient totalCaloriesNutrient = new Nutrient("Calories", "kcal", caloriesTotal);
     	nutrients.add(totalCaloriesNutrient);
     	
-    	GetRecipeNutritionsResult getRecipeNutritionsResult =  GetRecipeNutritionsResult.builder()
-    			.nutrients(nutrients)
-    			.build();
+    	GetRecipeNutritionsResult getRecipeNutritionsResult =  new GetRecipeNutritionsResult(nutrients);
+    	log.info("Extracted nutritions from the result: {}", getRecipeNutritionsResult);
     	return getRecipeNutritionsResult;
     }
     
@@ -129,6 +135,8 @@ public class RecipeService {
      * @throws RuntimeException if an unexpected error occurs
      */
     public GetRecipeTotalCaloriesResult getRecipeCustomizedTotalCalories(String recipeID, List<String> excludedIngredientNames) {
+    	log.info("Calculating recipe calories using the following reciptID: {}", recipeID);
+    	log.info("Excluding the following ingredients: {}", excludedIngredientNames);
     	SpoonacularGetRecipeNutritionsResponse response = spoonacularClient.getRecipeNutritions(recipeID);
     	
     	double caloriesTotal = 0;
@@ -140,13 +148,22 @@ public class RecipeService {
     			caloriesTotal += extractCalories(ingredient);
     		}
     	}
+    	log.info("Calculated total calories: {}", caloriesTotal);
     	
-    	GetRecipeTotalCaloriesResult getRecipeTotalCaloriesResult =  GetRecipeTotalCaloriesResult.builder()
-    			.totalCalories(caloriesTotal)
-    			.build();
+    	GetRecipeTotalCaloriesResult getRecipeTotalCaloriesResult =  new GetRecipeTotalCaloriesResult(caloriesTotal);
     	return getRecipeTotalCaloriesResult;
     }
     
+    /**
+     * Return's the calories within an ingredient
+     * <p>
+     * This method iterates over all nutritions within an ingredient, until it finds its calories, and 
+     * returns them.
+     * </p>
+     *
+     * @param ingredient the ingredient to extract the calories from
+     * @return the calories within the specified ingredient, or 0 if anything goes along the way
+     */
     private double extractCalories(Ingredient ingredient) {
     	log.trace("Extracting calories from: {}", ingredient);
     	if (ingredient == null || ingredient.getNutrients() == null) {
