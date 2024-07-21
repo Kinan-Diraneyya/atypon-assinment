@@ -30,6 +30,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+/**
+ * Test class for the RecipeController.
+ * <p>
+ * This class contains test cases for testing the RecipeController's endpoints using MockMvc.
+ * </p>
+ */
 @WebMvcTest(RecipeController.class)
 public class RecipeControllerTest {
 
@@ -42,11 +48,17 @@ public class RecipeControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    /**
+     * Sets up the MockMvc instance before each test.
+     */
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    /**
+     * Tests the searchRecipes endpoint for a successful response.
+     */
     @Test
     public void testSearchRecipes_Success() throws Exception {
         String query = "pasta";
@@ -73,6 +85,9 @@ public class RecipeControllerTest {
                 .andExpect(jsonPath("$.records[*].imageType", containsInAnyOrder("jpg", "png")));
     }
 
+    /**
+     * Tests the searchRecipes endpoint for a bad request when the query parameter is missing.
+     */
     @Test
     public void testSearchRecipes_BadRequest() throws Exception {
         mockMvc.perform(get("/api/v1/recipes/search")
@@ -80,6 +95,9 @@ public class RecipeControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the getRecipeNutritions endpoint for a successful response.
+     */
     @Test
     public void testGetRecipeNutritions_Success() throws Exception {
         String recipeID = "1";
@@ -101,12 +119,18 @@ public class RecipeControllerTest {
                 .andExpect(jsonPath("$.nutrients[*].amount", containsInAnyOrder(10d, 2d)));
     }
 
+    /**
+     * Tests the getRecipeNutritions endpoint for a bad request when the recipe ID is missing.
+     */
     @Test
     public void testGetRecipeNutritions_BadRequest() throws Exception {
         mockMvc.perform(get("/api/v1/recipes//nutritions"))
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the getCustomizedRecipeCalories endpoint for a successful response.
+     */
     @Test
     public void testGetCustomizedRecipeCalories_Success() throws Exception {
         String recipeID = "1";
@@ -121,6 +145,9 @@ public class RecipeControllerTest {
                 .andExpect(jsonPath("$.totalCalories").value(10d));
     }
 
+    /**
+     * Tests the getCustomizedRecipeCalories endpoint for a bad request when the recipe ID is missing.
+     */
     @Test
     public void testGetCustomizedRecipeCalories_BadRequest() throws Exception {
         mockMvc.perform(get("/api/v1/recipes//customized-calories")
@@ -128,6 +155,9 @@ public class RecipeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the global exception handler for ClientException.
+     */
     @Test
     public void testHandleClientException() throws Exception {
         String query = "pasta";
@@ -138,6 +168,9 @@ public class RecipeControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the global exception handler for ServerException.
+     */
     @Test
     public void testHandleServerException() throws Exception {
         String query = "pasta";
@@ -148,6 +181,9 @@ public class RecipeControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
+    /**
+     * Tests the global exception handler for TimeoutException.
+     */
     @Test
     public void testHandleTimeoutException() throws Exception {
         String query = "pasta";
@@ -158,6 +194,9 @@ public class RecipeControllerTest {
                 .andExpect(status().isGatewayTimeout());
     }
 
+    /**
+     * Tests the global exception handler for general exceptions.
+     */
     @Test
     public void testHandleGeneralException() throws Exception {
         String query = "pasta";
