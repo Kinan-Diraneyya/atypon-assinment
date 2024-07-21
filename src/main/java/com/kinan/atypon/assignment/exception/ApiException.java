@@ -7,8 +7,10 @@ package com.kinan.atypon.assignment.exception;
  * </p>
  */
 public class ApiException extends RuntimeException {
-	
-    /**
+
+	private static final long serialVersionUID = 1818523874170131949L;
+
+	/**
      * Constructs a new ApiException with the specified detail message.
      *
      * @param message the message explaining the reason for the error

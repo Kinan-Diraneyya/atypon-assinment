@@ -8,7 +8,9 @@ package com.kinan.atypon.assignment.exception;
  */
 public class ServerException extends ApiException {
 	
-    /**
+	private static final long serialVersionUID = 3568186881045362613L;
+
+	/**
      * Constructs a new ServerException with the specified detail message.
      *
      * @param message the detail message explaining the reason for the error
