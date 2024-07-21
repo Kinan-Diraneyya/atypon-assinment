@@ -12,21 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.kinan.atypon.assignment.service.RecipeService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.kinan.atypon.assignment.client.SpoonacularClient;
 import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
 import com.kinan.atypon.assignment.model.GetRecipeNutritionsResult;
 import com.kinan.atypon.assignment.model.GetRecipeTotalCaloriesResult;
 import com.kinan.atypon.assignment.model.SearchRecipesResult;
-import com.kinan.atypon.assignment.model.SpoonacularGetRecipeNutritionsResponse;
-import com.kinan.atypon.assignment.model.SpoonacularSearchRecipesResponse;
 
 /**
  * REST controller for handling recipe-related requests.
