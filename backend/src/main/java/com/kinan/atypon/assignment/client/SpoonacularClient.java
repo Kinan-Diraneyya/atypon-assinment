@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
-import com.kinan.atypon.assignment.model.SpoonacularGetRecipeNutritionsResponse;
+import com.kinan.atypon.assignment.model.SpoonacularGetRecipeInformationResponse;
 import com.kinan.atypon.assignment.model.SpoonacularSearchRecipesResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,29 +50,29 @@ public class SpoonacularClient {
     }
 
     /**
-     * Return's a recipe's nutritions based on its ID
+     * Return's a recipe's information based on its ID
      * <p>
-     * This method sends a GET request to the Spoonacular API's recipe nutritions endpoint
-     * to retrieve its nutritional values
+     * This method sends a GET request to the Spoonacular API's recipe information endpoint
+     * to retrieve its information.
      * </p>
      *
      * @param recipeId the recipe's ID
-     * @return a {@link SpoonacularGetRecipeNutritionsResponse} containing the nutritions of the recipe
+     * @return a {@link SpoonacularGetRecipeInformationResponse} containing the nutritions of the recipe
      * @throws IllegalArgumentException if the query is null or empty
      * @throws ClientException if a client error occurs (4xx)
      * @throws ServerException if a server error occurs (5xx)
      * @throws TimeoutException if a timeout error occurs
      * @throws RuntimeException if an unexpected error occurs
      */
-    public SpoonacularGetRecipeNutritionsResponse getRecipeNutritions(String recipeId) {
-    	log.info("Fetching recipe nutritions from Spoonacular using the following reciptID: {}", recipeId);
+    public SpoonacularGetRecipeInformationResponse getRecipeInformation(String recipeId) {
+    	log.info("Fetching recipe information from Spoonacular using the following reciptID: {}", recipeId);
     	if (recipeId == null || recipeId.trim().isEmpty()) {
             log.error("Invalid recipe ID parameter: recipeId cannot be null or empty");
             throw new IllegalArgumentException("recipeId cannot be null or empty");
         }
     	
-        String url = String.format("recipes/%s/nutritionWidget.json?apiKey=%s", recipeId, apiKey);
-        SpoonacularGetRecipeNutritionsResponse response = execute(url, SpoonacularGetRecipeNutritionsResponse.class);
+        String url = String.format("recipes/%s/information?includeNutrition=true&apiKey=%s", recipeId, apiKey);
+        SpoonacularGetRecipeInformationResponse response = execute(url, SpoonacularGetRecipeInformationResponse.class);
         return response;
     }
 
@@ -114,7 +114,7 @@ public class SpoonacularClient {
      *
      * @param subUrl the sub URL on the Spoonacular API
      * @param responseType The type of the response object to return
-     * @return a {@link SpoonacularGetRecipeNutritionsResponse} containing the nutritions of the recipe
+     * @return a {@link SpoonacularGetRecipeInformationResponse} containing the nutritions of the recipe
      * @throws IllegalArgumentException if the query is null or empty
      * @throws ClientException if a client error occurs (4xx)
      * @throws ServerException if a server error occurs (5xx)

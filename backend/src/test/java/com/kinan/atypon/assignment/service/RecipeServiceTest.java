@@ -5,13 +5,14 @@ import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
 import com.kinan.atypon.assignment.model.SpoonacularSearchRecipesResponse;
-import com.kinan.atypon.assignment.model.GetRecipeNutritionsResult;
+import com.kinan.atypon.assignment.model.GetRecipeInformationResult;
 import com.kinan.atypon.assignment.model.GetRecipeTotalCaloriesResult;
 import com.kinan.atypon.assignment.model.Ingredient;
 import com.kinan.atypon.assignment.model.Nutrient;
+import com.kinan.atypon.assignment.model.Nutrition;
 import com.kinan.atypon.assignment.model.Recipe;
 import com.kinan.atypon.assignment.model.SearchRecipesResult;
-import com.kinan.atypon.assignment.model.SpoonacularGetRecipeNutritionsResponse;
+import com.kinan.atypon.assignment.model.SpoonacularGetRecipeInformationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,14 +45,14 @@ public class RecipeServiceTest {
     }
 
     /**
-     * Tests that the getRecipeNutritions method with a valid recipe ID returns a successful result.
+     * Tests that the getRecipeInformation method with a valid recipe ID returns a successful result.
      * <p>
-     * This test verifies that the getRecipeNutritions method returns the same nutretions it receives
+     * This test verifies that the getRecipeInformation method returns the same nutretions it receives
      * from Spoonacular, with the calories calculated as the sum of the calories of the returned ingredients.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_SuccessfulResult() {
+    public void testGetRecipeInformation_SuccessfulResult() {
     	Nutrient[] mockTotalNutrientsArray = {
                 new Nutrient("Calories", "kcal", 10d),
                 new Nutrient("b", "g", 2d),
@@ -60,91 +61,94 @@ public class RecipeServiceTest {
     	List<Nutrient> mockTotalNutrients = Arrays.asList(mockTotalNutrientsArray);
     	
     	Ingredient[] mockIngredientsArray = {
-    			new Ingredient(1, "a", Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 2d) })), 
-    			new Ingredient(2, "b", Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 8d) })), 
-    			new Ingredient(3, "c", null)
+    			
+    			new Ingredient(1, "a", "image", "kcal", "original", 1d, Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 2d) })), 
+    			new Ingredient(2, "b", "image", "kcal", "original", 1d, Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 8d) })), 
+    			new Ingredient(3, "c", "image", "kcal", "original", 1d, null)
         };
     	List<Ingredient> mockIngredients = Arrays.asList(mockIngredientsArray);
     	
-        SpoonacularGetRecipeNutritionsResponse mockResponse = new SpoonacularGetRecipeNutritionsResponse(mockTotalNutrients, mockIngredients);
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenReturn(mockResponse);
+    	Nutrition nutrition = new Nutrition(mockTotalNutrients, mockIngredients);
+    	
+    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse("title", "image", 1d, 2, 3d,  null, "summary", nutrition );
+        when(spoonacularClient.getRecipeInformation(anyString())).thenReturn(mockResponse);
         
-        GetRecipeNutritionsResult response = recipeService.getRecipeNutritions("existingRecipeID");
+        GetRecipeInformationResult response = recipeService.getRecipeInformation("existingRecipeID");
         assertThat(response.getNutrients(), containsInAnyOrder(mockTotalNutrientsArray));
     }
     
     /**
-     * Tests that the getRecipeNutritions method with an empty recipe ID throws an IllegalArgumentException.
+     * Tests that the getRecipeInformation method with an empty recipe ID throws an IllegalArgumentException.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws an IllegalArgumentException when
+     * This test verifies that the getRecipeInformation method throws an IllegalArgumentException when
      * given an empty recipe ID.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_EmptyRecipeID() {
-    	when(spoonacularClient.getRecipeNutritions("")).thenThrow(IllegalArgumentException.class);
+    public void testGetRecipeInformation_EmptyRecipeID() {
+    	when(spoonacularClient.getRecipeInformation("")).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-        	recipeService.getRecipeNutritions("");
+        	recipeService.getRecipeInformation("");
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method with a null recipe ID throws an IllegalArgumentException.
+     * Tests that the getRecipeInformation method with a null recipe ID throws an IllegalArgumentException.
      * <p>
      * This test verifies that the searchRecipes method throws an IllegalArgumentException when
      * given a null recipe ID.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_NullRecipeID() {
-    	when(spoonacularClient.getRecipeNutritions(null)).thenThrow(IllegalArgumentException.class);
+    public void testGetRecipeInformation_NullRecipeID() {
+    	when(spoonacularClient.getRecipeInformation(null)).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-        	recipeService.getRecipeNutritions(null);
+        	recipeService.getRecipeInformation(null);
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method delegates the ClientException if it encounters one.
+     * Tests that the getRecipeInformation method delegates the ClientException if it encounters one.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a ClientException when its underlying
+     * This test verifies that the getRecipeInformation method throws a ClientException when its underlying
      * RecipeService encounters a client error.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_ClientError() {
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenThrow(ClientException.class);
+    public void testGetRecipeInformation_ClientError() {
+        when(spoonacularClient.getRecipeInformation(anyString())).thenThrow(ClientException.class);
         assertThrows(ClientException.class, () -> {
-            recipeService.getRecipeNutritions("invalidID");
+            recipeService.getRecipeInformation("invalidID");
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method delegates the ServerException if it encounters one.
+     * Tests that the getRecipeInformation method delegates the ServerException if it encounters one.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a ServerException when its underlying
+     * This test verifies that the getRecipeInformation method throws a ServerException when its underlying
      * RecipeService encounters a server error.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_ServerError() {
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenThrow(ServerException.class);
+    public void testGetRecipeInformation_ServerError() {
+        when(spoonacularClient.getRecipeInformation(anyString())).thenThrow(ServerException.class);
         assertThrows(ServerException.class, () -> {
-            recipeService.getRecipeNutritions("recipeID");
+            recipeService.getRecipeInformation("recipeID");
         });
     }
 
     /**
-     * Tests the that the getRecipeNutritions method delegates the TimeoutException if it encounters one.
+     * Tests the that the getRecipeInformation method delegates the TimeoutException if it encounters one.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a TimeoutException when its underlying
+     * This test verifies that the getRecipeInformation method throws a TimeoutException when its underlying
      * RecipeService encounters a timeout error.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_TimeoutError() {
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenThrow(TimeoutException.class);
+    public void testGetRecipeInformation_TimeoutError() {
+        when(spoonacularClient.getRecipeInformation(anyString())).thenThrow(TimeoutException.class);
         assertThrows(TimeoutException.class, () -> {
-            recipeService.getRecipeNutritions("recipeID");
+            recipeService.getRecipeInformation("recipeID");
         });
     }
 
@@ -247,10 +251,9 @@ public class RecipeServiceTest {
     }
 
     /**
-     * Tests that the getRecipeNutritions method with a valid query returns a successful result.
+     * Tests that the getRecipeCustomizedTotalCalories method with a valid query returns a successful result.
      * <p>
-     * This test verifies that the getRecipeNutritions method returns a correct {@link GetRecipeTotalCaloriesResult},
-     * mapping offset to page, number to pageSize, and results to records.
+     * This test verifies that the getRecipeCustomizedTotalCalories method returns a correct {@link GetRecipeTotalCaloriesResult}.
      * </p>
      */
     @Test
@@ -263,92 +266,94 @@ public class RecipeServiceTest {
     	List<Nutrient> mockTotalNutrients = Arrays.asList(mockTotalNutrientsArray);
     	
     	Ingredient[] mockIngredientsArray = {
-    			new Ingredient(1, "a", Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 2d) })), 
-    			new Ingredient(2, "b", Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 8d) })), 
-    			new Ingredient(3, "c", null)
+    			
+    			new Ingredient(1, "a", "image", "kcal", "original", 1d, Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 2d) })), 
+    			new Ingredient(2, "b", "image", "kcal", "original", 1d, Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 8d) })), 
+    			new Ingredient(3, "c", "image", "kcal", "original", 1d, null)
         };
     	List<Ingredient> mockIngredients = Arrays.asList(mockIngredientsArray);
     	
     	List<String> excludedIngredientsNames = Arrays.asList(new String[] {"b", "c"});
+    	Nutrition nutrition = new Nutrition(mockTotalNutrients, mockIngredients);
     	
-    	SpoonacularGetRecipeNutritionsResponse mockResponse = new SpoonacularGetRecipeNutritionsResponse(mockTotalNutrients, mockIngredients);
+    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse("title", "image", 1d, 2, 3d,  null, "summary", nutrition );
     	GetRecipeTotalCaloriesResult expectedResponse = new GetRecipeTotalCaloriesResult(2d);
     	
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenReturn(mockResponse);
+        when(spoonacularClient.getRecipeInformation(anyString())).thenReturn(mockResponse);
         GetRecipeTotalCaloriesResult response = recipeService.getRecipeCustomizedTotalCalories("recipeID", excludedIngredientsNames);
         assertEquals(response, expectedResponse);
     }
     
     /**
-     * Tests that the getRecipeNutritions method with an empty query throws an IllegalArgumentException.
+     * Tests that the getRecipeCustomizedTotalCalories method with an empty query throws an IllegalArgumentException.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws an IllegalArgumentException when
+     * This test verifies that the getRecipeCustomizedTotalCalories method throws an IllegalArgumentException when
      * given an empty query.
      * </p>
      */
     @Test
     public void testGetRecipeCustomizedTotalCalories_EmptyQuery() {
-    	when(spoonacularClient.getRecipeNutritions("")).thenThrow(IllegalArgumentException.class);
+    	when(spoonacularClient.getRecipeInformation("")).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
         	recipeService.getRecipeCustomizedTotalCalories("", null);
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method with a null query throws an IllegalArgumentException.
+     * Tests that the getRecipeCustomizedTotalCalories method with a null query throws an IllegalArgumentException.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws an IllegalArgumentException when
+     * This test verifies that the getRecipeCustomizedTotalCalories method throws an IllegalArgumentException when
      * given a null query.
      * </p>
      */
     @Test
     public void testGetRecipeCustomizedTotalCalories_NullQuery() {
-    	when(spoonacularClient.getRecipeNutritions(null)).thenThrow(IllegalArgumentException.class);
+    	when(spoonacularClient.getRecipeInformation(null)).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
         	recipeService.getRecipeCustomizedTotalCalories(null, null);
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method delegates the ClientException if it encounters one.
+     * Tests that the getRecipeCustomizedTotalCalories method delegates the ClientException if it encounters one.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a ClientException when its underlying
+     * This test verifies that the getRecipeCustomizedTotalCalories method throws a ClientException when its underlying
      * RecipeService encounters a client error.
      * </p>
      */
     @Test
     public void ttestGetRecipeCustomizedTotalCalories_ClientError() {
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenThrow(ClientException.class);
+        when(spoonacularClient.getRecipeInformation(anyString())).thenThrow(ClientException.class);
         assertThrows(ClientException.class, () -> {
         	recipeService.getRecipeCustomizedTotalCalories("", null);
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method delegates the ServerException if it encounters one.
+     * Tests that the getRecipeCustomizedTotalCalories method delegates the ServerException if it encounters one.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a ServerException when its underlying
+     * This test verifies that the getRecipeCustomizedTotalCalories method throws a ServerException when its underlying
      * RecipeService encounters a server error.
      * </p>
      */
     @Test
     public void testGetRecipeCustomizedTotalCalories_ServerError() {
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenThrow(ServerException.class);
+        when(spoonacularClient.getRecipeInformation(anyString())).thenThrow(ServerException.class);
         assertThrows(ServerException.class, () -> {
         	recipeService.getRecipeCustomizedTotalCalories("", null);
         });
     }
 
     /**
-     * Tests the that the getRecipeNutritions method delegates the TimeoutException if it encounters one.
+     * Tests the that the getRecipeCustomizedTotalCalories method delegates the TimeoutException if it encounters one.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a TimeoutException when its underlying
+     * This test verifies that the getRecipeCustomizedTotalCalories method throws a TimeoutException when its underlying
      * RecipeService encounters a timeout error.
      * </p>
      */
     @Test
     public void testGetRecipeCustomizedTotalCalories_TimeoutError() {
-        when(spoonacularClient.getRecipeNutritions(anyString())).thenThrow(TimeoutException.class);
+        when(spoonacularClient.getRecipeInformation(anyString())).thenThrow(TimeoutException.class);
         assertThrows(TimeoutException.class, () -> {
         	recipeService.getRecipeCustomizedTotalCalories("", null);
         });

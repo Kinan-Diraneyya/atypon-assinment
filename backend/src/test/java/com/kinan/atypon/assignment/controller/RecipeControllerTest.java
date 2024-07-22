@@ -3,7 +3,7 @@ package com.kinan.atypon.assignment.controller;
 import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
-import com.kinan.atypon.assignment.model.GetRecipeNutritionsResult;
+import com.kinan.atypon.assignment.model.GetRecipeInformationResult;
 import com.kinan.atypon.assignment.model.GetRecipeTotalCaloriesResult;
 import com.kinan.atypon.assignment.model.Nutrient;
 import com.kinan.atypon.assignment.model.Recipe;
@@ -96,10 +96,10 @@ public class RecipeControllerTest {
     }
 
     /**
-     * Tests the getRecipeNutritions endpoint for a successful response.
+     * Tests the getRecipeInformation endpoint for a successful response.
      */
     @Test
-    public void testGetRecipeNutritions_Success() throws Exception {
+    public void testGetRecipeInformation_Success() throws Exception {
         String recipeID = "1";
         
     	Nutrient[] mockTotalNutrientsArray = {
@@ -107,12 +107,22 @@ public class RecipeControllerTest {
                 new Nutrient("b", "g", 2d),
         };
     	List<Nutrient> mockTotalNutrients = Arrays.asList(mockTotalNutrientsArray);
-        GetRecipeNutritionsResult mockResult = new GetRecipeNutritionsResult(mockTotalNutrients);
+    	String[] mockDishTypesArray = { "a", "b" };
+    	List<String> mockDishTypes = Arrays.asList(mockDishTypesArray);
+        GetRecipeInformationResult mockResult = new GetRecipeInformationResult("title", "image", 1d, 2, 3d, mockDishTypes, "summary", mockTotalNutrients);
 
-        when(recipeService.getRecipeNutritions(recipeID)).thenReturn(mockResult);
+        when(recipeService.getRecipeInformation(recipeID)).thenReturn(mockResult);
 
-        mockMvc.perform(get("/api/v1/recipes/{recipeID}/nutritions", recipeID))
+        mockMvc.perform(get("/api/v1/recipes/{recipeID}/information", recipeID))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("title"))
+                .andExpect(jsonPath("$.image").value("image"))
+                .andExpect(jsonPath("$.summary").value("summary"))
+                .andExpect(jsonPath("$.readyInMinutes").value(1d))
+                .andExpect(jsonPath("$.servings").value(2))
+                .andExpect(jsonPath("$.healthScore").value(3d))
+                .andExpect(jsonPath("$.dishTypes", hasSize(2)))
+                .andExpect(jsonPath("$.dishTypes", containsInAnyOrder("a", "b")))
                 .andExpect(jsonPath("$.nutrients", hasSize(2)))
                 .andExpect(jsonPath("$.nutrients[*].name", containsInAnyOrder("Calories", "b")))
                 .andExpect(jsonPath("$.nutrients[*].unit", containsInAnyOrder("kcal", "g")))
@@ -120,11 +130,11 @@ public class RecipeControllerTest {
     }
 
     /**
-     * Tests the getRecipeNutritions endpoint for a bad request when the recipe ID is missing.
+     * Tests the getRecipeInformation endpoint for a bad request when the recipe ID is missing.
      */
     @Test
-    public void testGetRecipeNutritions_BadRequest() throws Exception {
-        mockMvc.perform(get("/api/v1/recipes//nutritions"))
+    public void testGetRecipeInformation_BadRequest() throws Exception {
+        mockMvc.perform(get("/api/v1/recipes//information"))
                 .andExpect(status().isNotFound());
     }
 

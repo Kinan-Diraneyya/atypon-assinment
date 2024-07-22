@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  * Represents a Spoonacular ingredient.
  * <p>
  * This class provides a data model for Spoonacular ingredients.
- * The class is used inside {@link SpoonacularGetRecipeNutritionsResponse}.
+ * The class is used inside {@link SpoonacularGetRecipeInformationResponse}.
  * </p>
  */
 @Data
@@ -32,6 +32,27 @@ public class Ingredient {
      * The name of the ingredient.
      */
 	private String name;
+	
+	
+	/**
+     * The image of the ingredient.
+     */
+	private String image;
+	
+	/**
+     * The unit of the ingredient.
+     */
+	private String unit;
+	
+	/**
+     * The original description of the ingredient, as noted by the recipe's author.
+     */
+	private String original;
+	
+	/**
+     * The amount from the ingredient to use.
+     */
+	private double amount;
 	
 	/**
      * The ingredient's detailed list of nutrients.

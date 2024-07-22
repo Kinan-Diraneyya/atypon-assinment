@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
-import com.kinan.atypon.assignment.model.GetRecipeNutritionsResult;
+import com.kinan.atypon.assignment.model.GetRecipeInformationResult;
 import com.kinan.atypon.assignment.model.GetRecipeTotalCaloriesResult;
 import com.kinan.atypon.assignment.model.SearchRecipesResult;
 
@@ -78,19 +78,19 @@ public class RecipeController {
 	}
 
 	/**
-     * Retrieves the nutritional information for a specific recipe.
+     * Retrieves the information information for a specific recipe.
      * <p>
-     * This method handles GET requests to the /{recipeID}/nutritions endpoint and returns the nutritional information for the specified recipe.
+     * This method handles GET requests to the /{recipeID}/information endpoint and returns the information for the specified recipe.
      * If the recipe ID is empty or null, it responds with a 400 Bad Request status.
      * </p>
      *
      * @param recipeID the ID of the recipe
-     * @return a ResponseEntity containing the nutritional information
+     * @return a ResponseEntity containing the information information
      */
-	@GetMapping("/{recipeID}/nutritions")
-	public ResponseEntity<GetRecipeNutritionsResult> getRecipeNutritions(@PathVariable String recipeID) {
-		log.info("Received get recipe nutritions request with recipe ID: {}", recipeID);
-		GetRecipeNutritionsResult response = recipeService.getRecipeNutritions(recipeID);
+	@GetMapping("/{recipeID}/information")
+	public ResponseEntity<GetRecipeInformationResult> getRecipeInformation(@PathVariable String recipeID) {
+		log.info("Received get recipe information request with recipe ID: {}", recipeID);
+		GetRecipeInformationResult response = recipeService.getRecipeInformation(recipeID);
 		log.info("Returning reponse: {}", response);
 		return ResponseEntity.ok(response);
 	}

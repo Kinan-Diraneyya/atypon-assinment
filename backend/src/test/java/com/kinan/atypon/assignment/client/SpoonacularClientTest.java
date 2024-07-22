@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
-import com.kinan.atypon.assignment.model.SpoonacularGetRecipeNutritionsResponse;
+import com.kinan.atypon.assignment.model.SpoonacularGetRecipeInformationResponse;
 import com.kinan.atypon.assignment.model.SpoonacularSearchRecipesResponse;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,90 +47,90 @@ public class SpoonacularClientTest {
     }
 
     /**
-     * Tests that the getRecipeNutritions method with a valid recipe ID returns a successful response.
+     * Tests that the getRecipeInformation method with a valid recipe ID returns a successful response.
      * <p>
-     * This test verifies that the getRecipeNutritions method returns a non-null response
+     * This test verifies that the getRecipeInformationmethod returns a non-null response
      * when a valid recipe ID is provided. The RestTemplate is mocked to return a predefined response.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_SuccessfulResponse() {
-    	SpoonacularGetRecipeNutritionsResponse mockResponse = new SpoonacularGetRecipeNutritionsResponse();
+    public void testGetRecipeInformation_SuccessfulResponse() {
+    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse();
         when(restTemplate.getForObject(anyString(), any())).thenReturn(mockResponse);
-        SpoonacularGetRecipeNutritionsResponse response = spoonacularClient.getRecipeNutritions("pasta");
+        SpoonacularGetRecipeInformationResponse response = spoonacularClient.getRecipeInformation("pasta");
         assertEquals(mockResponse, response);
     }
 
     /**
-     * Tests that the getRecipeNutritions method with an empty recipe ID throws an IllegalArgumentException.
+     * Tests that the getRecipeInformation method with an empty recipe ID throws an IllegalArgumentException.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws an IllegalArgumentException when
+     * This test verifies that the getRecipeInformation method throws an IllegalArgumentException when
      * given an empty recipe ID.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_EmptyRecipeID() {
+    public void testGetRecipeInformation_EmptyRecipeID() {
         assertThrows(IllegalArgumentException.class, () -> {
-            spoonacularClient.getRecipeNutritions("");
+            spoonacularClient.getRecipeInformation("");
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method with a null recipe ID throws an IllegalArgumentException.
+     * Tests that the getRecipeInformation method with a null recipe ID throws an IllegalArgumentException.
      * <p>
      * This test verifies that the searchRecipes method throws an IllegalArgumentException when
      * given a null recipe ID.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_NullRecipeID() {
+    public void testGetRecipeInformation_NullRecipeID() {
         assertThrows(IllegalArgumentException.class, () -> {
-            spoonacularClient.getRecipeNutritions(null);
+            spoonacularClient.getRecipeInformation(null);
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method throws a ClientException when it encounters an HttpClientErrorException.
+     * Tests that the getRecipeInformation method throws a ClientException when it encounters an HttpClientErrorException.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a ClientException when its underlying
+     * This test verifies that the getRecipeInformation method throws a ClientException when its underlying
      * restTemplate encounters a client error and throws an HttpClientErrorException.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_ClientError() {
+    public void testGetRecipeInformation_ClientError() {
         when(restTemplate.getForObject(anyString(), any())).thenThrow(HttpClientErrorException.class);
         assertThrows(ClientException.class, () -> {
-            spoonacularClient.getRecipeNutritions("invalidRecipeID");
+            spoonacularClient.getRecipeInformation("invalidRecipeID");
         });
     }
 
     /**
-     * Tests that the getRecipeNutritions method throws a ServerException when it encounters an HttpServerErrorException.
+     * Tests that the getRecipeInformation method throws a ServerException when it encounters an HttpServerErrorException.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a ServerException when its underlying
+     * This test verifies that the getRecipeInformation method throws a ServerException when its underlying
      * restTemplate encounters a server error and throws an HttpServerErrorException.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_ServerError() {
+    public void testGetRecipeInformation_ServerError() {
         when(restTemplate.getForObject(anyString(), any())).thenThrow(HttpServerErrorException.class);
         assertThrows(ServerException.class, () -> {
-            spoonacularClient.getRecipeNutritions("validRecipeID");
+            spoonacularClient.getRecipeInformation("validRecipeID");
         });
     }
 
     /**
-     * Tests the that the getRecipeNutritions method throws a TimeoutException when its request times out.
+     * Tests the that the getRecipeInformation method throws a TimeoutException when its request times out.
      * <p>
-     * This test verifies that the getRecipeNutritions method throws a TimeoutException when its underlying
+     * This test verifies that the getRecipeInformation method throws a TimeoutException when its underlying
      * restTemplate times out and throws a ResourceAccessException.
      * </p>
      */
     @Test
-    public void testGetRecipeNutritions_TimeoutError() {
+    public void testGetRecipeInformation_TimeoutError() {
         when(restTemplate.getForObject(anyString(), any())).thenThrow(ResourceAccessException.class);
         assertThrows(TimeoutException.class, () -> {
-            spoonacularClient.getRecipeNutritions("validQuery");
+            spoonacularClient.getRecipeInformation("validQuery");
         });
     }
 

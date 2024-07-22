@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * Represents a Spoonacular nutrient.
  * <p>
  * This class provides a data model for Spoonacular nutrients.
- * The class is used inside {@link Ingredient} and {@link SpoonacularGetRecipeNutritionsResponse}.
+ * The class is used inside {@link Ingredient} and {@link SpoonacularGetRecipeInformationResponse}.
  * </p>
  */
 @Data

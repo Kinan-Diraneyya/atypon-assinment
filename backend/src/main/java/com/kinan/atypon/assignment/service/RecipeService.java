@@ -4,18 +4,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import com.kinan.atypon.assignment.client.SpoonacularClient;
 import com.kinan.atypon.assignment.exception.ClientException;
 import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
-import com.kinan.atypon.assignment.model.GetRecipeNutritionsResult;
+import com.kinan.atypon.assignment.model.GetRecipeInformationResult;
 import com.kinan.atypon.assignment.model.GetRecipeTotalCaloriesResult;
 import com.kinan.atypon.assignment.model.Ingredient;
 import com.kinan.atypon.assignment.model.Nutrient;
 import com.kinan.atypon.assignment.model.SearchRecipesResult;
-import com.kinan.atypon.assignment.model.SpoonacularGetRecipeNutritionsResponse;
+import com.kinan.atypon.assignment.model.SpoonacularGetRecipeInformationResponse;
 import com.kinan.atypon.assignment.model.SpoonacularSearchRecipesResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -76,27 +78,27 @@ public class RecipeService {
     }
     
     /**
-     * Return's a recipe's nutritions based on its ID
+     * Return's a recipe's information based on its ID
      * <p>
-     * This method uses a SpoonacularClient to fetch the specified recipe's nutritional values.
-     * The method returns all totals found in SpoonacularClient as is, except for calories, whuch
+     * This method uses a SpoonacularClient to fetch the specified recipe's information.
+     * The method returns all info & totals found in SpoonacularClient as is, except for calories, which
      * it sums up from the calories of each individual ingredient. There is not advantage to doing this
      * extra calculation, but it was specifically specified in the requirements.
      * </p>
      *
      * @param recipeId the recipe's ID
-     * @return a {@link SpoonacularGetRecipeNutritionsResponse} containing the nutritions of the recipe
+     * @return a {@link SpoonacularGetRecipeInformationResponse} containing the information of the recipe
      * @throws IllegalArgumentException if the recipe ID is null or empty
      * @throws ClientException if a client error occurs (4xx)
      * @throws ServerException if a server error occurs (5xx)
      * @throws TimeoutException if a timeout error occurs
      * @throws RuntimeException if an unexpected error occurs
      */
-    public GetRecipeNutritionsResult getRecipeNutritions(String recipeID) {
-    	log.info("Fetching recipe nutritions using the following reciptID: {}", recipeID);
+    public GetRecipeInformationResult getRecipeInformation(String recipeID) {
+    	log.info("Fetching recipe information using the following reciptID: {}", recipeID);
     	
-    	SpoonacularGetRecipeNutritionsResponse response = spoonacularClient.getRecipeNutritions(recipeID);
-    	List<Nutrient> nutrients = response.getNutrients()
+    	SpoonacularGetRecipeInformationResponse response = spoonacularClient.getRecipeInformation(recipeID);
+    	List<Nutrient> nutrients = response.getNutrition().getNutrients()
     			.stream()
     			.filter(n -> !"calories".equalsIgnoreCase(n.getName()))
     			.collect(Collectors.toList());
@@ -107,16 +109,27 @@ public class RecipeService {
     	// However, the total calories of one recipe can be accessed directly through response.nutrients
     	// by finding the nutrient with the name 'calories'.
     	double caloriesTotal = 0;
-    	for (Ingredient ingredient : response.getIngredients()) {
+    	for (Ingredient ingredient : response.getNutrition().getIngredients()) {
     		caloriesTotal += extractCalories(ingredient);
     	}
     	log.trace("The sum of the calories of all ingredients: {}", caloriesTotal);
     	Nutrient totalCaloriesNutrient = new Nutrient("Calories", "kcal", caloriesTotal);
     	nutrients.add(totalCaloriesNutrient);
     	
-    	GetRecipeNutritionsResult getRecipeNutritionsResult =  new GetRecipeNutritionsResult(nutrients);
-    	log.info("Extracted nutritions from the result: {}", getRecipeNutritionsResult);
-    	return getRecipeNutritionsResult;
+    	Document doc = Jsoup.parse(response.getSummary());
+    	String sanitizedSummary = doc.text();
+    	
+    	GetRecipeInformationResult getRecipeInformationResult =  new GetRecipeInformationResult(
+    			response.getTitle(),
+    			response.getImage(),
+    			response.getReadyInMinutes(),
+    			response.getServings(),
+    			response.getHealthScore(),
+    			response.getDishTypes(),
+    			sanitizedSummary,
+    			nutrients);
+    	log.info("Extracted information from the result: {}", getRecipeInformationResult);
+    	return getRecipeInformationResult;
     }
     
     
@@ -129,7 +142,7 @@ public class RecipeService {
      * </p>
      *
      * @param recipeId the recipe's ID
-     * @return a {@link SpoonacularGetRecipeNutritionsResponse} containing the nutritions of the recipe
+     * @return a {@link GetRecipeTotalCaloriesResult} containing the total calories of the recipe
      * @throws IllegalArgumentException if the recipe ID is null or empty
      * @throws ClientException if a client error occurs (4xx)
      * @throws ServerException if a server error occurs (5xx)
@@ -139,10 +152,10 @@ public class RecipeService {
     public GetRecipeTotalCaloriesResult getRecipeCustomizedTotalCalories(String recipeID, List<String> excludedIngredientNames) {
     	log.info("Calculating recipe calories using the following reciptID: {}", recipeID);
     	log.info("Excluding the following ingredients: {}", excludedIngredientNames);
-    	SpoonacularGetRecipeNutritionsResponse response = spoonacularClient.getRecipeNutritions(recipeID);
+    	SpoonacularGetRecipeInformationResponse response = spoonacularClient.getRecipeInformation(recipeID);
     	
     	double caloriesTotal = 0;
-    	for (Ingredient ingredient : response.getIngredients()) {
+    	for (Ingredient ingredient : response.getNutrition().getIngredients()) {
     		boolean isIngredientExcluded = excludedIngredientNames
     				.stream()
     				.anyMatch(i -> i != null && i.equalsIgnoreCase(ingredient.getName()));

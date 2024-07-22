@@ -9,9 +9,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * The response for GetRecipeNutritions.
+ * Represents a Spoonacular nutritional details.
  * <p>
- * This class is used as the response for the applications getRecipeNutrition's endpoint.
+ * This class provides a data model for Spoonacular nutrition.
+ * The class is used inside {@link SpoonacularGetRecipeInformationResponse}.
  * </p>
  */
 @Data
@@ -19,10 +20,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class GetRecipeNutritionsResult {
+public class Nutrition {
 	
 	/*
-	 * The response's nutrients
+	 * The recipe's total nutrients
 	 */
 	private List<Nutrient> nutrients;
+	
+	/*
+	 * The recipe's ingredients
+	 */
+	private List<Ingredient> ingredients;
 }
