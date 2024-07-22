@@ -25,7 +25,7 @@ export default function Header(props: HeaderProps) {
         <header className={style.header}>
             <div className={style.activeArea}>
                 <Logo />
-                <Search {...props} query=''  />
+                <Search {...props} />
             </div>
         </header>
     );
