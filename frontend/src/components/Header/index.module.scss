@@ -1,0 +1,14 @@
+@use '../../utilities/utilities.scss' as u;
+
+.header {
+    background-color: u.$primary-color;
+    padding: 0.8rem 0;
+
+    .activeArea {
+        @include u.content-area;
+        margin: auto;
+        display: flex;
+        gap: 1rem;
+        align-items: stretch;
+    }
+}
