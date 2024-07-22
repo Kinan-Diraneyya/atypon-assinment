@@ -1,0 +1,65 @@
+@use '../../../utilities/utilities.scss' as u;
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    // height: 280px;
+    width: 100%;
+    
+    &:hover {
+        .more {
+            height: 100%;
+            cursor: pointer;
+        }
+    }
+    .more {
+        width: 100%;
+        background-color: u.$primary-color;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        transition: height 0.5s cubic-bezier(0, 0.25, 0, 1);
+        height: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+    .image {
+        width: 100%;
+        height: auto;
+    }
+    .body {
+        flex: 1;
+        padding: 0.8rem;
+        font-weight: bold;
+        background-color: #EEEEEE;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+        
+        .title {
+            color: #3a3a3a;
+        }
+        .id {
+            font-weight: 200;
+            color: #666;
+        }
+    }
+    
+    @media screen and (max-width: 600px) {
+        flex-direction: row;
+
+        .image {
+            height: 100px;
+            width: auto;
+        }
+        .body {
+            font-size: 1rem;
+        }
+    }
+}
