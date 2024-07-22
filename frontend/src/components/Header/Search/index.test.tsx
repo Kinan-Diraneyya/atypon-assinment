@@ -4,37 +4,51 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Search from './index';
 import '@testing-library/jest-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
+}));
 
 describe('Search Component', () => {
-  const mockOnQueryChange = jest.fn();
-  const mockSearch = jest.fn();
-  const query = 'test query';
+  const mockReplace = jest.fn();
+  const mockSearchParams = {
+    get: jest.fn(),
+  };
 
   beforeEach(() => {
-    render(
-      <Search
-        onQueryChange={mockOnQueryChange}
-        query={query}
-        search={mockSearch}
-      />
-    );
+    (useRouter as jest.Mock).mockReturnValue({ replace: mockReplace });
+    (useSearchParams as jest.Mock).mockReturnValue(mockSearchParams);
+    mockSearchParams.get.mockReturnValue('');
   });
 
-  test('renders the search input with the correct placeholder and value', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('renders correctly with initial state', () => {
+    render(<Search />);
     const inputElement = screen.getByPlaceholderText('Search recipes');
     expect(inputElement).toBeInTheDocument();
-    expect(inputElement).toHaveValue(query);
+    expect(inputElement).toHaveValue('');
   });
 
-  test('calls onQueryChange when the input value changes', () => {
+  test('updates input value on change', () => {
+    render(<Search />);
     const inputElement = screen.getByPlaceholderText('Search recipes');
     fireEvent.change(inputElement, { target: { value: 'new query' } });
-    expect(mockOnQueryChange).toHaveBeenCalledWith('new query');
+    expect(inputElement).toHaveValue('new query');
   });
 
-  test('calls search function when the form is submitted', () => {
+  test('updates query string on form submit', () => {
+    render(<Search />);
+    const inputElement = screen.getByPlaceholderText('Search recipes');
+    fireEvent.change(inputElement, { target: { value: 'new query' } });
+
     const formElement = screen.getByRole('search');
     fireEvent.submit(formElement);
-    expect(mockSearch).toHaveBeenCalled();
+
+    expect(mockReplace).toHaveBeenCalledWith('?q=new query');
   });
 });
