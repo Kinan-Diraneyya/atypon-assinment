@@ -47,14 +47,20 @@ public class GetRecipeInformationResult {
 	private Double healthScore;
 	
 	/*
+	 * The recipe's summary
+	 */
+	private String summary;
+	
+	/*
 	 * The recipe's dish types (tags)
 	 */
 	private List<String> dishTypes;
 	
+	
 	/*
-	 * The recipe's summary
+	 * The recipe's ingredients
 	 */
-	private String summary;
+	private List<Ingredient> ingredients;
 	
 	/*
 	 * The recipe's nutrients

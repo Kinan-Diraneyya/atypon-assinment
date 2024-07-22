@@ -47,11 +47,6 @@ public class SpoonacularGetRecipeInformationResponse {
 	private Double healthScore;
 	
 	/*
-	 * The recipe's dish types (tags)
-	 */
-	private List<String> dishTypes;
-	
-	/*
 	 * The recipe's summary
 	 */
 	private String summary;
@@ -60,4 +55,14 @@ public class SpoonacularGetRecipeInformationResponse {
 	 * The recipe's nutrition, broken down by multiple categories
 	 */
 	private Nutrition nutrition;
+	
+	/*
+	 * The recipe's dish types (tags)
+	 */
+	private List<String> dishTypes;
+	
+	/*
+	 * The recipe's detailed ingredients
+	 */
+	private List<Ingredient> extendedIngredients;
 }

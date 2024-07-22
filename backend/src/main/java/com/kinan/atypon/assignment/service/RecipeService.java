@@ -125,9 +125,10 @@ public class RecipeService {
     			response.getReadyInMinutes(),
     			response.getServings(),
     			response.getHealthScore(),
-    			response.getDishTypes(),
     			sanitizedSummary,
-    			nutrients);
+    			response.getDishTypes(),
+    			response.getExtendedIngredients(),
+    			response.getNutrition().getNutrients());
     	log.info("Extracted information from the result: {}", getRecipeInformationResult);
     	return getRecipeInformationResult;
     }

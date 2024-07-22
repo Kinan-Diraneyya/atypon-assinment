@@ -60,8 +60,7 @@ public class RecipeServiceTest {
         };
     	List<Nutrient> mockTotalNutrients = Arrays.asList(mockTotalNutrientsArray);
     	
-    	Ingredient[] mockIngredientsArray = {
-    			
+    	Ingredient[] mockIngredientsArray = {		
     			new Ingredient(1, "a", "image", "kcal", "original", 1d, Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 2d) })), 
     			new Ingredient(2, "b", "image", "kcal", "original", 1d, Arrays.asList(new Nutrient[] { new Nutrient("Calories","kcal", 8d) })), 
     			new Ingredient(3, "c", "image", "kcal", "original", 1d, null)
@@ -70,7 +69,7 @@ public class RecipeServiceTest {
     	
     	Nutrition nutrition = new Nutrition(mockTotalNutrients, mockIngredients);
     	
-    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse("title", "image", 1d, 2, 3d,  null, "summary", nutrition );
+    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse("title", "image", 1d, 2, 3d,  "summary", nutrition, null, mockIngredients);
         when(spoonacularClient.getRecipeInformation(anyString())).thenReturn(mockResponse);
         
         GetRecipeInformationResult response = recipeService.getRecipeInformation("existingRecipeID");
@@ -276,7 +275,7 @@ public class RecipeServiceTest {
     	List<String> excludedIngredientsNames = Arrays.asList(new String[] {"b", "c"});
     	Nutrition nutrition = new Nutrition(mockTotalNutrients, mockIngredients);
     	
-    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse("title", "image", 1d, 2, 3d,  null, "summary", nutrition );
+    	SpoonacularGetRecipeInformationResponse mockResponse = new SpoonacularGetRecipeInformationResponse("title", "image", 1d, 2, 3d,  "summary", nutrition, null, mockIngredients);
     	GetRecipeTotalCaloriesResult expectedResponse = new GetRecipeTotalCaloriesResult(2d);
     	
         when(spoonacularClient.getRecipeInformation(anyString())).thenReturn(mockResponse);

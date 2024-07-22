@@ -5,6 +5,7 @@ import com.kinan.atypon.assignment.exception.ServerException;
 import com.kinan.atypon.assignment.exception.TimeoutException;
 import com.kinan.atypon.assignment.model.GetRecipeInformationResult;
 import com.kinan.atypon.assignment.model.GetRecipeTotalCaloriesResult;
+import com.kinan.atypon.assignment.model.Ingredient;
 import com.kinan.atypon.assignment.model.Nutrient;
 import com.kinan.atypon.assignment.model.Recipe;
 import com.kinan.atypon.assignment.model.SearchRecipesResult;
@@ -107,9 +108,14 @@ public class RecipeControllerTest {
                 new Nutrient("b", "g", 2d),
         };
     	List<Nutrient> mockTotalNutrients = Arrays.asList(mockTotalNutrientsArray);
+    	
     	String[] mockDishTypesArray = { "a", "b" };
     	List<String> mockDishTypes = Arrays.asList(mockDishTypesArray);
-        GetRecipeInformationResult mockResult = new GetRecipeInformationResult("title", "image", 1d, 2, 3d, mockDishTypes, "summary", mockTotalNutrients);
+    	
+    	Ingredient[] mockIngredientsArray = { new Ingredient(1, "a", "image", "kcal", "original", 1d, null) };
+    	List<Ingredient> mockIngredients = Arrays.asList(mockIngredientsArray);
+    	
+        GetRecipeInformationResult mockResult = new GetRecipeInformationResult("title", "image", 1d, 2, 3d, "summary", mockDishTypes, mockIngredients, mockTotalNutrients);
 
         when(recipeService.getRecipeInformation(recipeID)).thenReturn(mockResult);
 
@@ -124,6 +130,12 @@ public class RecipeControllerTest {
                 .andExpect(jsonPath("$.dishTypes", hasSize(2)))
                 .andExpect(jsonPath("$.dishTypes", containsInAnyOrder("a", "b")))
                 .andExpect(jsonPath("$.nutrients", hasSize(2)))
+                .andExpect(jsonPath("$.ingredients[0].id").value(1))
+                .andExpect(jsonPath("$.ingredients[0].name").value("a"))
+                .andExpect(jsonPath("$.ingredients[0].image").value("image"))
+                .andExpect(jsonPath("$.ingredients[0].unit").value("kcal"))
+                .andExpect(jsonPath("$.ingredients[0].original").value("original"))
+                .andExpect(jsonPath("$.ingredients[0].amount").value(1d))
                 .andExpect(jsonPath("$.nutrients[*].name", containsInAnyOrder("Calories", "b")))
                 .andExpect(jsonPath("$.nutrients[*].unit", containsInAnyOrder("kcal", "g")))
                 .andExpect(jsonPath("$.nutrients[*].amount", containsInAnyOrder(10d, 2d)));
