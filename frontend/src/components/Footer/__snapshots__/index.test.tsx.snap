@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer Component matches snapshot 1`] = `
+<DocumentFragment>
+  <footer
+    class="footer"
+  >
+    <small
+      class="text"
+    >
+      Created on 21/07/2024 for Atypon online assignment
+    </small>
+  </footer>
+</DocumentFragment>
+`;

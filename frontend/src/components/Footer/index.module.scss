@@ -1,0 +1,13 @@
+@use '../../utilities/utilities.scss' as u;
+
+.footer {
+    background-color: #4c4c4c;
+
+    .text {
+        @include u.content-area;
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+        color: white;
+        font-size: 0.8rem;
+    }
+}
