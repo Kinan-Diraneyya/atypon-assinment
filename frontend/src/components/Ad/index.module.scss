@@ -1,0 +1,29 @@
+@use '../../utilities/utilities.scss' as u;
+
+.ad {
+    height: 180px;
+    background-image: linear-gradient(90deg, rgba(43,98,79) 0%, rgba(43,98,79) 50%, rgba(19,50,32) 50%, rgba(19,50,32) 100%);
+
+    .content {
+        background-image: url(/ad.jpg);
+        background-position-x: right;
+        @include u.content-area;
+        display: flex;
+        align-items: center;
+
+        .title {
+            display: flex;
+            flex-direction: column;
+            color: white;
+            font-family: serif;
+            font-size: 2rem;
+
+            .special {
+                font-weight: bolder;
+            }
+            .recipes {
+                font-weight: 200;
+            }
+        }
+    }
+}
