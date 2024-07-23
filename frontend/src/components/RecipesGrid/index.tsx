@@ -12,9 +12,9 @@ interface RecipesGridProps {
     query?: string | string[];
 }
 
-
 /**
  * The RecipesGrid component
+ * 
  * This component renders a grid of recipe cards based on the search query, or string saying that none were found.
  * 
  * @param {RecipesGridProps} props - The props for the RecipesGrid component.
