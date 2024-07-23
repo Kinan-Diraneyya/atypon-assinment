@@ -1,0 +1,27 @@
+.recipesGrid{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+
+    .title {
+        margin: 0;
+        font-weight: 200;
+        font-size: 2rem;
+    }
+    
+    .grid {
+        display: grid;
+        gap: 0.8rem;
+    
+        $break-points: 600px, 800px, 1000px;
+    
+        @for $i from 1 through length($break-points) {
+            $threshold: nth($break-points, $i);
+            
+            @media screen and (min-width: $threshold) {
+                grid-template-columns: repeat(($i + 1), 1fr);
+            }
+        }
+    }
+}
