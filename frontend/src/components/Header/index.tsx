@@ -1,6 +1,8 @@
 import Logo from './Logo';
 import style from './index.module.scss';
 import Search from './Search';
+import Spinner from '../Spinner';
+import { Suspense } from 'react';
 
 /**
  * Header Component
@@ -14,7 +16,9 @@ export default function Header() {
         <header className={style.header}>
             <div className={style.activeArea}>
                 <Logo />
-                <Search />
+                <Suspense fallback={<Spinner />}>
+                    <Search />
+                </Suspense>
             </div>
         </header>
     );

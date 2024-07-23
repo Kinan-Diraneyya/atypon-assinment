@@ -2,6 +2,8 @@ import { fetchRecipes, SearchRecipesResponse } from '@/utilities/api';
 import style from './index.module.scss';
 import RecipeCard, { RecipeCardProps } from './RecipeCard';
 import Pagination from './Pagination';
+import { Suspense } from 'react';
+import Spinner from '../Spinner';
 
 const PAGE_SIZE = 12;
 
@@ -42,7 +44,9 @@ export default async function RecipesGrid({ query, page = '1' }: RecipesGridProp
                         <div className={style.grid} role="list">
                             {recipeCards.map(card => <RecipeCard key={card.id} {...card} />)}
                         </div>
-                        <Pagination pageCount={responseData.totalResults / responseData.pageSize} />
+                        <Suspense fallback={<Spinner />}>
+                            <Pagination pageCount={responseData.totalResults / responseData.pageSize} />
+                        </Suspense>
                     </>
                     ) :
                     <p>No recipes to show</p>

@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Header from '.';
 
-jest.mock('./Logo', () => () => <div>Mocked Logo Component</div>);
-jest.mock('./Search', () => () => <div>Mocked Search Component</div>);
+jest.mock('./Logo', () => function logo() { return <div>Mocked Logo Component</div>});
+jest.mock('./Search', () => function search() { return <div>Mocked Search Component</div>});
 
 describe('Header Component', () => {
   test('renders the Logo component', () => {

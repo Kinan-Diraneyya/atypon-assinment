@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Ingredients, { IngredientsProps } from './index';
 
-jest.mock('./Ingredient', () => () => <div>Mocked Ingredient</div>);
+jest.mock('./Ingredient', () => function Logo() { return <div>Mocked Ingredient Component</div>});
 
 describe('Ingredients Component', () => {
   const propsWithIngredients: IngredientsProps = {
