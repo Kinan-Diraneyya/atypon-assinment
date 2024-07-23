@@ -1,7 +1,8 @@
 .error {
   display: flex;
   align-items: center;
-  align-items: center;
+  justify-content: center;
+  text-align: center;
   height: 100%;
   width: 100%;
   font-size: 1.2rem;
@@ -9,5 +10,5 @@
   color: #721c24;
   background-color: #f5c6cb;
   border: 1px solid #f5c6cb;
-  padding: 2rem;
+  padding: 1rem;
 }

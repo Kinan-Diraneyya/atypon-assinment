@@ -1,0 +1,25 @@
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex: 1;
+
+  .content {
+    display: flex;
+    align-items: center;
+
+    .title {
+      display: inline-block;
+      margin-right: 1.2rem;
+      padding-right: 1.2rem;
+      font-size: 1.6rem;
+      font-weight: bold;
+      border-right: 1px solid black;
+    }
+
+    .message {
+      font-size: 0.8rem;
+    }
+  }
+}
