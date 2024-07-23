@@ -1,0 +1,16 @@
+.nutrients {
+    .title {
+        font-size: 1.6rem;
+        font-weight: 200;
+        margin-bottom: 1rem;
+    }
+    .list {
+        margin-left: 1.2rem;
+        .item {
+            line-height: 1.6;
+        }
+    }
+    .empty {
+        color: grey;
+    }
+}
