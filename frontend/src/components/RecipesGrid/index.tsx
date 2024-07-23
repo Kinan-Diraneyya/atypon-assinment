@@ -1,22 +1,6 @@
+import { fetchRecipes } from '@/utilities/api';
 import style from './index.module.scss';
 import RecipeCard, { RecipeCardProps } from './RecipeCard';
-import axios from 'axios';
-
-/**
- * Interface representing the response structure for fetching recipes.
- * 
- * @interface
- * @property {number} page - The current page number.
- * @property {number} pageSize - The number of records per page.
- * @property {number} totalCount - The total number of records.
- * @property {Recipe[]} records - The list of recipe records.
- */
-interface SearchRecipesResponse {
-    page: number;
-    pageSize: number;
-    totalCount: number;
-    records: Recipe[];
-}
 
 /**
  * Interface representing the props for the RecipesGrid component.
@@ -56,17 +40,4 @@ export default async function RecipesGrid({ query }: RecipesGridProps) {
             }
         </div>
     );
-}
-
-/**
- * Fetches recipes based on the given search query.
- * 
- * @async
- * @function fetchRecipes
- * @param {string} query - The search query string.
- * @returns {Promise<SearchRecipesResponse>} The response data containing the list of recipes.
- */
-export async function fetchRecipes(query: string) {
-    const response = await axios.get<SearchRecipesResponse>(`${process.env.NEXT_PUBLIC_BASE_API_URL}/search`, { params: { query } })
-    return response.data;
 }
