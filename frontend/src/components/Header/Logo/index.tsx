@@ -8,5 +8,5 @@ import style from './index.module.scss';
  * @returns {JSX.Element} The Logo component.
  */
 export default function Logo() {
-    return <div className={style.logo}>Spoonacular Recipe Client</div>;
+    return <a href='/' className={style.logo}>Spoonacular Recipe Client</a>;
 }

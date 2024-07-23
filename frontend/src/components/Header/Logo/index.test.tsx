@@ -4,14 +4,15 @@ import '@testing-library/jest-dom';
 import Logo from './index';
 
 describe('Logo Component', () => {
-  test('renders without crashing', () => {
-    render(<Logo />);
-    const logoElement = screen.getByText('Spoonacular Recipe Client');
-    expect(logoElement).toBeInTheDocument();
-  });
-
   test('matches snapshot', () => {
     const { asFragment } = render(<Logo />);
     expect(asFragment()).toMatchSnapshot();
+  });
+
+  test('renders the Logo component and ensures it navigates to the root', () => {
+    render(<Logo />);
+    const logoElement = screen.getByText('Spoonacular Recipe Client');
+    expect(logoElement).toBeInTheDocument();
+    expect(logoElement).toHaveAttribute('href', '/');
   });
 });
