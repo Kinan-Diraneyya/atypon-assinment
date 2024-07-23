@@ -26,7 +26,7 @@ export default function Search() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        router.replace(`?q=${searchQuery}`);
+        router.replace(`/?q=${searchQuery}`);
     };
 
     return (

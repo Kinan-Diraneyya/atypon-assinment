@@ -49,6 +49,6 @@ describe('Search Component', () => {
     const formElement = screen.getByRole('search');
     fireEvent.submit(formElement);
 
-    expect(mockReplace).toHaveBeenCalledWith('?q=new query');
+    expect(mockReplace).toHaveBeenCalledWith('/?q=new query');
   });
 });
