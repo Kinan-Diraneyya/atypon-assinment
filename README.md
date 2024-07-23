@@ -3,11 +3,20 @@ This application is a submission for an online assignment for Atypon for the pos
 It has a backend made using **Spring Boot** and a frontend made using **React JS**.
 
 ## Running the Application
-To run the application, do the following:
-1. Clone the application from [my repo](https://github.com/Kinan-Diraneyya/progresssoft-assignment/)
-2. Rename `application-template.yml` to `application.yml`. Then, either add your API key to the file, or supply it as an environment variable with the name `SPOONACULAR_API_KEY`
-3. Make sure that docker is running
-4. Navigate to the project's root and run `docker-compose up --build`
+The easiest way to run the application is using docker. It involves the following steps
+1. Clone the application from [my repo](https://github.com/Kinan-Diraneyya/atypon-assinment/)
+2. Make sure that docker is running
+3. Navigate to the project's root
+4. Set up your API key and Spoonacular URL environment variables: `export SPOONACULAR_BASE_URL=https://api.spoonacular.com` & `export SPOONACULAR_API_KEY=<You API key>`. Please note that this command my differ depending on your shell (`set` for windows, `$env` for powershell)
+5. Run `docker-compose up --build`
+6. Access the application on `localhost:3000`
+
+Alternatively, you can build and run each application individually, which is does through the following steps:
+1. Clone the application from [my repo](https://github.com/Kinan-Diraneyya/atypon-assinment/)
+2. Rename `application-template.yml` to `application.yml`. Then, add your API key to the file
+3. Run the Java project by navigating to its folder and running `./mvnw package && java -jar target/atypon.assignment-0.0.1-SNAPSHOT.jar`
+4. Run the React project by navigating to its folder and running `npm i`, followed by `npm run build`, followed by `npm run start`
+5. Access the application on `localhost:3000`
 
 ## Basic Usage
 You can either use the application's frontend by navigating to `localhost:3000`, its swagger UI by navigating to `localhost:8080/swagger-ui/index.html`, or directly call one of its 3 endponts:
