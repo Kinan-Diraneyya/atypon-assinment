@@ -1,0 +1,36 @@
+@use '../../../utilities/utilities.scss' as u;
+
+.ingredient {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    flex-direction: row;
+    width: 100%;
+
+    .image {
+        height: 100px;
+        width: auto;
+    }
+    .body {
+        font-size: 1rem;
+        flex: 1;
+        padding: 0.8rem;
+        font-weight: bold;
+        background-color: #EEEEEE;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+        
+        .title {
+            color: #3a3a3a;
+            font-size: 1.2rem;
+        }
+        .id {
+            font-weight: 200;
+            color: #666;
+        }
+    }
+}
