@@ -1,0 +1,58 @@
+@use '../../utilities/utilities.scss' as u;
+
+.recipe {
+    display: flex;
+
+    @media screen and (max-width: 1000px) {
+        flex-direction: column;
+        .image {
+            width: 100%;
+            height: auto;
+        }
+    }
+    
+    .details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: #eee;
+        padding: 1rem;
+        gap: 1rem;
+
+        .title {
+            font-size: 1.6rem;
+        }
+        .summary {
+            font-size: 0.8rem;
+            font-weight: 200;
+        }
+        .specs {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .types {
+            margin-top: auto;
+
+            .title {
+                font-size: 1rem;
+                margin-bottom: 0.4rem;
+            }
+            .list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+                list-style: none;
+                
+                .type {
+                    font-size: 0.8rem;
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 1rem;
+                    background-color: u.$primary-color;
+                    color: white;
+                }
+            }
+        }
+    }
+}
