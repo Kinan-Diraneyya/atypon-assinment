@@ -12,7 +12,7 @@ import axios from "axios";
 export interface SearchRecipesResponse {
     page: number;
     pageSize: number;
-    totalCount: number;
+    totalResults: number;
     records: Recipe[];
 }
 
@@ -24,8 +24,8 @@ export interface SearchRecipesResponse {
  * @param {string} query - The search query string.
  * @returns {Promise<SearchRecipesResponse>} The response data containing the list of recipes.
  */
-export async function fetchRecipes(query: string) {
-    const response = await axios.get<SearchRecipesResponse>(`${process.env.NEXT_PUBLIC_BASE_API_URL}/search`, { params: { query } })
+export async function fetchRecipes(query: string, page = 0, pageSize = 10) {
+    const response = await axios.get<SearchRecipesResponse>(`${process.env.NEXT_PUBLIC_BASE_API_URL}/search`, { params: { query, page, pageSize } })
     return response.data;
 }
 

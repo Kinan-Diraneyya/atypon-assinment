@@ -1,0 +1,19 @@
+@use '../../../utilities/utilities.scss' as u;
+
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 0.4rem;
+
+    .page {
+        background-color: u.$primary-color;
+        color: white;
+        font-size: 0.8rem;
+        height: 2rem;
+        width: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+}

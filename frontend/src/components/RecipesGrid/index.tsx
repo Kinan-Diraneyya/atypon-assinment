@@ -1,6 +1,9 @@
-import { fetchRecipes } from '@/utilities/api';
+import { fetchRecipes, SearchRecipesResponse } from '@/utilities/api';
 import style from './index.module.scss';
 import RecipeCard, { RecipeCardProps } from './RecipeCard';
+import Pagination from './Pagination';
+
+const PAGE_SIZE = 12;
 
 /**
  * Interface representing the props for the RecipesGrid component.
@@ -9,7 +12,8 @@ import RecipeCard, { RecipeCardProps } from './RecipeCard';
  * @property {string | string[]} [query] - The search query string or array of query strings.
  */
 interface RecipesGridProps {
-    query?: string | string[];
+    query?: string;
+    page?: string
 }
 
 /**
@@ -20,11 +24,11 @@ interface RecipesGridProps {
  * @param {RecipesGridProps} props - The props for the RecipesGrid component.
  * @returns {JSX.Element} The RecipesGrid component.
  */
-export default async function RecipesGrid({ query }: RecipesGridProps) {
+export default async function RecipesGrid({ query, page = '1' }: RecipesGridProps) {
     let recipeCards: RecipeCardProps[] = [];
-    if (query && (!Array.isArray(query) || query.length > 0)) {
-        query = Array.isArray(query) ? query[0] : query;
-        const responseData = await fetchRecipes(query);
+    let responseData: SearchRecipesResponse | undefined= undefined;
+    if (query) {
+        responseData = await fetchRecipes(query, Number.parseInt(page) - 1, PAGE_SIZE);
         recipeCards = responseData.records.map(recipe => ({ ...recipe, imgSrc: recipe.image }));
     }
 
@@ -32,10 +36,15 @@ export default async function RecipesGrid({ query }: RecipesGridProps) {
         <div className={style.recipesGrid} role="region" aria-labelledby="recipes-heading">
             <h2 className={style.title} id="recipes-heading">Recipes</h2>
             {
-                recipeCards.length > 0 ?
-                    <div className={style.grid} role="list">
-                        {recipeCards.map(card => <RecipeCard key={card.id} {...card} />)}
-                    </div> :
+                responseData && recipeCards.length > 0 ?
+                    (
+                        <>
+                        <div className={style.grid} role="list">
+                            {recipeCards.map(card => <RecipeCard key={card.id} {...card} />)}
+                        </div>
+                        <Pagination pageCount={responseData.totalResults / responseData.pageSize} />
+                    </>
+                    ) :
                     <p>No recipes to show</p>
             }
         </div>

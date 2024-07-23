@@ -3,13 +3,13 @@ import RecipesGrid from "@/components/RecipesGrid";
 import Separator from "@/components/Separator";
 
 interface PageProps {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | undefined };
 }
 
 export default function Page({ searchParams }: PageProps) {
   return (
     <>
-      <RecipesGrid query={searchParams?.q} />
+      <RecipesGrid query={searchParams?.q} page={searchParams?.page} />
       <Separator />
       <FeaturedRecipe />
     </>
