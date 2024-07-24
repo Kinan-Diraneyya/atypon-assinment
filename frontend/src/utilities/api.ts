@@ -25,7 +25,7 @@ export interface SearchRecipesResponse {
  * @returns {Promise<SearchRecipesResponse>} The response data containing the list of recipes.
  */
 export async function fetchRecipes(query: string, page = 0, pageSize = 10) {
-    const response = await axios.get<SearchRecipesResponse>(`${process.env.NEXT_PUBLIC_BASE_API_URL}/search`, { params: { query, page, pageSize } })
+    const response = await axios.get<SearchRecipesResponse>(`${process.env.BASE_API_URL}/search`, { params: { query, page, pageSize } })
     return response.data;
 }
 
@@ -65,6 +65,6 @@ export interface GetRecipeInformationResponse {
  * @returns {Promise<GetRecipeInformationResponse>} The response data containing detailed information about the recipe.
  */
 export async function fetchRecipeInformation(id: string) {
-    const response = await axios.get<GetRecipeInformationResponse>(`${process.env.NEXT_PUBLIC_BASE_API_URL}/${id}/information`);
+    const response = await axios.get<GetRecipeInformationResponse>(`${process.env.BASE_API_URL}/${id}/information`);
     return response.data;
 }
