@@ -21,7 +21,7 @@ interface PaginationProps {
  * @param {RecipesGridProps} props - The props for the Pagination component.
  * @returns {JSX.Element} The Pagination component.
  */
-export default async function Pagination({ pageCount }: PaginationProps) {
+export default function Pagination({ pageCount }: PaginationProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
 
